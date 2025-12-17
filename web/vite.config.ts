@@ -5,6 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/health': {
+        target: 'http://127.0.0.1:8003',
+        changeOrigin: true
+      },
       '/api': {
         target: 'http://127.0.0.1:8003',
         changeOrigin: true

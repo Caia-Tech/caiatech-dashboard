@@ -514,6 +514,7 @@ async def run_eval(body: Dict[str, Any]) -> Any:
         str(inference_url).strip(),
         "--eval-runs-dir",
         str(EVAL_RUNS_DIR),
+        "--no-artifact-uri",
     ]
 
     # Optional tuning knobs.

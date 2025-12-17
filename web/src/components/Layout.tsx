@@ -13,6 +13,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <NavLink to="/models" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Models
           </NavLink>
+          <NavLink to="/releases" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            Releases
+          </NavLink>
+          <NavLink to="/playground" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            Playground
+          </NavLink>
+          <NavLink to="/evals" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            Evals
+          </NavLink>
+          <NavLink to="/services" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            Services
+          </NavLink>
         </div>
       </div>
 

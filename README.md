@@ -6,10 +6,18 @@ This repo intentionally starts small:
 - `api/`: FastAPI service that talks to your existing `model-registry` (keeps the registry API key server-side)
 - `web/`: React (Vite) UI
 
+Current UI pages:
+- `Releases`: lifecycle view by model name (gate `core-v1`, promote to staging/production)
+- `Models`: browse models, metrics, audit events
+- `Playground`: call `onyx-api` by `model_id`
+- `Evals`: run `caiatech-eval-service` suites and persist artifacts locally
+- `Services`: connectivity/health overview
+
 ## Prereqs
 
 - `model-registry` running (default: `http://127.0.0.1:8001`)
 - A registry API key configured on `model-registry` (`CAIA_REGISTRY_API_KEY`) and provided to this dashboard API.
+  - For full functionality: `artifact-cache-service` + `onyx-api` + `caiatech-eval-service` adjacent (default path).
 
 ## Run (dev)
 
@@ -44,6 +52,10 @@ Then open the Vite URL (usually `http://127.0.0.1:5173`).
 Dashboard API:
 - `CAIA_REGISTRY_URL` (default `http://127.0.0.1:8001`)
 - `CAIA_REGISTRY_API_KEY` (required)
+- `CAIA_ARTIFACT_CACHE_URL` (default `http://127.0.0.1:8002`)
+- `CAIA_ONYX_API_URL` (default `http://127.0.0.1:8000`)
+- `CAIA_EVAL_SERVICE_DIR` (default `../caiatech-eval-service` relative to this repo)
+- `CAIA_DASHBOARD_EVAL_RUNS_DIR` (default `./eval_runs` under `api/`)
 - `CAIA_DASHBOARD_CORS_ORIGINS` (optional CSV; default allows localhost dev ports)
 
 Web UI:

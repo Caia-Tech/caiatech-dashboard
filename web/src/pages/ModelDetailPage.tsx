@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-import { getModel, getModelEvents, getModelMetrics, promoteModel } from '../api/client'
-import type { Model, ModelEvent } from '../types'
+import { getModel, getModelEvents, getModelMetrics, promoteModel, resolveModelCheckpoint, runEval, evalJsonlUrl, evalSummaryUrl } from '../api/client'
+import type { Model, ModelEvent, ArtifactResolveResponse, EvalRunResult } from '../types'
 import { JsonView } from '../components/JsonView'
 import { StatusBadge } from '../components/StatusBadge'
 
@@ -21,6 +21,10 @@ export function ModelDetailPage() {
   const [error, setError] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
   const [promoting, setPromoting] = React.useState(false)
+  const [resolving, setResolving] = React.useState(false)
+  const [resolved, setResolved] = React.useState<ArtifactResolveResponse | null>(null)
+  const [evalRunning, setEvalRunning] = React.useState(false)
+  const [evalResult, setEvalResult] = React.useState<EvalRunResult | null>(null)
 
   async function refresh() {
     if (!Number.isFinite(modelId)) return
@@ -42,6 +46,35 @@ export function ModelDetailPage() {
       setEvents(null)
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function doResolve() {
+    setResolving(true)
+    setError(null)
+    setResolved(null)
+    try {
+      const r = await resolveModelCheckpoint(modelId)
+      setResolved(r)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e))
+    } finally {
+      setResolving(false)
+    }
+  }
+
+  async function doEval(suite: string) {
+    setEvalRunning(true)
+    setError(null)
+    setEvalResult(null)
+    try {
+      const r = await runEval({ model_id: modelId, suite })
+      setEvalResult(r)
+      await refresh()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e))
+    } finally {
+      setEvalRunning(false)
     }
   }
 
@@ -77,6 +110,15 @@ export function ModelDetailPage() {
         <div className="controls">
           <button className="secondary" onClick={() => void refresh()} disabled={loading}>
             Refresh
+          </button>
+          <button className="secondary" onClick={() => void doResolve()} disabled={!model || resolving}>
+            {resolving ? 'Resolving…' : 'Resolve artifact'}
+          </button>
+          <button className="secondary" onClick={() => void doEval('smoke-v1')} disabled={!model || evalRunning}>
+            {evalRunning ? 'Running…' : 'Run smoke'}
+          </button>
+          <button className="secondary" onClick={() => void doEval('core-v1')} disabled={!model || evalRunning}>
+            {evalRunning ? 'Running…' : 'Run core'}
           </button>
           <button onClick={() => void doPromote('staging')} disabled={!model || promoting}>
             Promote → staging
@@ -126,6 +168,32 @@ export function ModelDetailPage() {
               <div className="k">Updated</div>
               <div className="v">{model.updated_at}</div>
             </div>
+
+            {resolved ? (
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap' }}>
+                  <span className="badge">artifact</span>
+                  <span className="small">{resolved.cached ? 'cached' : 'downloaded'}</span>
+                  <span className="small">· {resolved.local_path}</span>
+                </div>
+              </div>
+            ) : null}
+
+            {evalResult ? (
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap' }}>
+                  <span className="badge">eval</span>
+                  <span className="badge">{evalResult.suite}</span>
+                  <span className="badge">pass {(evalResult.pass_rate * 100).toFixed(1)}%</span>
+                  <a className="badge" href={evalSummaryUrl(evalResult.eval_run_id)} target="_blank" rel="noreferrer">
+                    summary
+                  </a>
+                  <a className="badge" href={evalJsonlUrl(evalResult.eval_run_id)} target="_blank" rel="noreferrer">
+                    jsonl
+                  </a>
+                </div>
+              </div>
+            ) : null}
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
               <div>
