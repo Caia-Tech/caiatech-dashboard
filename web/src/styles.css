@@ -1,0 +1,223 @@
+:root {
+  --bg: #0b1020;
+  --panel: rgba(255, 255, 255, 0.06);
+  --panel-2: rgba(255, 255, 255, 0.09);
+  --border: rgba(255, 255, 255, 0.12);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.72);
+  --muted-2: rgba(255, 255, 255, 0.55);
+  --accent: #7c5cff;
+  --accent-2: #31d0aa;
+  --danger: #ff4d6d;
+  --warning: #ffb703;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: radial-gradient(1000px 600px at 20% 0%, rgba(124, 92, 255, 0.20), transparent 55%),
+              radial-gradient(900px 700px at 80% 20%, rgba(49, 208, 170, 0.14), transparent 60%),
+              var(--bg);
+  color: var(--text);
+}
+
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-title {
+  font-weight: 650;
+  letter-spacing: 0.2px;
+}
+
+.brand-sub {
+  color: var(--muted-2);
+  font-size: 12px;
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.nav a {
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: var(--muted);
+}
+
+.nav a.active {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.panel {
+  margin-top: 18px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.panel-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-body {
+  padding: 14px 16px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+input, select {
+  background: rgba(0,0,0,0.28);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: rgba(124, 92, 255, 0.6);
+}
+
+button {
+  background: linear-gradient(180deg, rgba(124, 92, 255, 0.95), rgba(124, 92, 255, 0.70));
+  border: 1px solid rgba(124, 92, 255, 0.5);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: rgba(255,255,255,0.06);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+button.danger {
+  background: linear-gradient(180deg, rgba(255, 77, 109, 0.95), rgba(255, 77, 109, 0.65));
+  border-color: rgba(255, 77, 109, 0.5);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  vertical-align: top;
+}
+
+.table th {
+  font-size: 12px;
+  color: var(--muted-2);
+  font-weight: 650;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.badge.prod { border-color: rgba(49,208,170,0.5); color: rgba(49,208,170,0.95); }
+.badge.stage { border-color: rgba(255,183,3,0.5); color: rgba(255,183,3,0.95); }
+.badge.exp { border-color: rgba(124,92,255,0.55); color: rgba(124,92,255,0.95); }
+.badge.arch { border-color: rgba(255,77,109,0.45); color: rgba(255,77,109,0.92); }
+
+.kv {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 10px 14px;
+  align-items: baseline;
+}
+
+.kv .k {
+  color: var(--muted-2);
+  font-size: 12px;
+}
+
+.kv .v {
+  color: var(--text);
+  word-break: break-word;
+}
+
+.pre {
+  background: rgba(0,0,0,0.30);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 12px;
+  overflow: auto;
+  max-height: 420px;
+}
+
+.small {
+  color: var(--muted-2);
+  font-size: 12px;
+}
+
+.error {
+  color: rgba(255, 77, 109, 0.95);
+}
